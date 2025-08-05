@@ -1,6 +1,6 @@
-const pool = require('../db');
+const pool = require('../config/db');
 
-exports.criarTransacao = async (req, res) => {
+const criarTransacao = async (req, res) => {
   const { descricao, valor, tipo } = req.body;
 
   try {
@@ -14,7 +14,7 @@ exports.criarTransacao = async (req, res) => {
   }
 };
 
-exports.listarTransacoes = async (req, res) => {
+const listarTransacoes = async (req, res) => {
   try {
     const resultado = await pool.query('SELECT * FROM transacoes ORDER BY data_transacao DESC');
     res.json(resultado.rows);
@@ -23,7 +23,7 @@ exports.listarTransacoes = async (req, res) => {
   }
 };
 
-exports.obterTransacaoPorId = async (req, res) => {
+const obterTransacaoPorId = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -37,7 +37,7 @@ exports.obterTransacaoPorId = async (req, res) => {
   }
 };
 
-exports.atualizarTransacao = async (req, res) => {
+const atualizarTransacao = async (req, res) => {
   const { id } = req.params;
   const { descricao, valor, tipo } = req.body;
 
@@ -55,7 +55,7 @@ exports.atualizarTransacao = async (req, res) => {
   }
 };
 
-exports.deletarTransacao = async (req, res) => {
+const deletarTransacao = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -69,7 +69,7 @@ exports.deletarTransacao = async (req, res) => {
   }
 };
 
-exports.resumoFinanceiro = async (req, res) => {
+const resumoFinanceiro = async (req, res) => {
   try {
     const entradas = await pool.query("SELECT SUM(valor) AS total FROM transacoes WHERE tipo = 'entrada'");
     const saidas = await pool.query("SELECT SUM(valor) AS total FROM transacoes WHERE tipo = 'saida'");
@@ -87,3 +87,6 @@ exports.resumoFinanceiro = async (req, res) => {
   }
 };
 
+
+
+module.exports = {criarTransacao, listarTransacoes, obterTransacaoPorId, atualizarTransacao, deletarTransacao, resumoFinanceiro}
